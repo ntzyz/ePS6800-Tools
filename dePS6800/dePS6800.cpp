@@ -1,14 +1,10 @@
-// dePS6800.cpp : 定义控制台应用程序的入口点。
-//
-
-#include "stdafx.h"
 #include <iostream>
 #include <fstream>
 #include <string>
 
 using namespace std;
 
-struct Instruction{
+struct Instruction {
 	uint16_t instrMask;
 	uint16_t instrPattern;
 	uint16_t instrWordNum;
@@ -22,7 +18,7 @@ struct Instruction{
 const int INSTR_COUNT = 85;
 
 const Instruction instructionSet[INSTR_COUNT + 1] = { //Include one unknown instruction
-	{ 0xFFFF, 0x0000, 1, 0, 0, 0, 0, "NOP" }, 
+	{ 0xFFFF, 0x0000, 1, 0, 0, 0, 0, "NOP" },
 	{ 0xFFFF, 0x0001, 1, 0, 0, 0, 0, "WDTC" },
 	{ 0xFFFF, 0x0002, 1, 0, 0, 0, 0, "SLEP" },
 	{ 0xFF00, 0x2700, 1, 1, 0x00FF, 0, 0, "RPT r%02xh" },
@@ -107,7 +103,7 @@ const Instruction instructionSet[INSTR_COUNT + 1] = { //Include one unknown inst
 	{ 0xFF00, 0x4F00, 1, 1, 0x00FF, 0, 0, "SFL4 r%02xh" },
 	{ 0xFF00, 0x0F00, 1, 1, 0x00FF, 0, 0, "SWAP r%02xh" },
 	{ 0xFF00, 0x0E00, 1, 1, 0x00FF, 0, 0, "SWAPA r%02xh" },
-	{ 0x0000, 0x0000, 1, 0, 0, 0, 0, "???"}
+	{ 0x0000, 0x0000, 1, 0, 0, 0, 0, "???" }
 };
 
 int firstOneFromRight(uint32_t data) {
@@ -123,11 +119,13 @@ int main(int argc, char *argv[])
 	uint32_t addressBase;
 	if (argc == 3) {
 		addressBase = atoi(argv[2]);
-	} else if (argc == 2) {
+	}
+	else if (argc == 2) {
 		addressBase = 0;
-	} else {
+	}
+	else {
 		cout << "Usage: dePS6800 input.bin" << endl;
-	    cout << "       dePS6800 input.bin base_addr_in_dec_words" << endl;
+		cout << "       dePS6800 input.bin base_addr_in_dec_words" << endl;
 		return 0;
 	}
 
@@ -140,7 +138,7 @@ int main(int argc, char *argv[])
 	uint32_t imm1, imm2, imm3;
 	uint32_t instruction;
 	uint32_t address;
-	
+
 
 	while (rom.read((char *)buffer, 2)) {
 		matchFound = false;
@@ -169,7 +167,7 @@ int main(int argc, char *argv[])
 				snprintf(instrout, sizeof(instrout), instructionSet[i].instrText.c_str(), imm1, imm2, imm3);
 			}
 		}
-		
+
 		cout << baseout << instrout << endl;
 	}
 
@@ -177,6 +175,5 @@ int main(int argc, char *argv[])
 
 	rom.close();
 
-    return 0;
+	return 0;
 }
-
